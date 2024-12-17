@@ -1,0 +1,48 @@
+services:
+  lucee:
+    image: lucee/lucee:6.1.0.243
+    environment:
+      - LUCEE_ADMIN_PASSWORD=qwerty
+    volumes:  
+      - "./myApp:/var/www"
+#      - "./patches:/opt/lucee/server/lucee-server/patches"
+    ports:
+      - "8854:8888"
+    networks:
+      - app-network
+
+  postgres_dev:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: test
+      POSTGRES_USER: lucee
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+  postgres_prod:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: production_db
+      POSTGRES_USER: prod_user
+      POSTGRES_PASSWORD: prod_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+      - ./production.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+volumes:
+  postgres_dev_data:
+  postgres_prod_data:
+
+networks: 
+  app-network:
+    driver: bridge

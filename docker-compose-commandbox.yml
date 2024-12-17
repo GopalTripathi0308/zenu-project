@@ -1,0 +1,10 @@
+services:
+  commandbox:
+    image: ortussolutions/commandbox
+    volumes:  
+      - ".:/app"
+    stdin_open: true
+    tty: true
+    entrypoint: /bin/bash
+    ports:
+      - "8080:8080"  # cfwheels

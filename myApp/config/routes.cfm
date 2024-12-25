@@ -6,14 +6,26 @@
 
 	mapper()
 
+		// Logo routes need to come before resources to avoid conflicts
+		.get(name="addAgencyLogo", pattern="agencies/[key]/logo/new", to="agencies##newLogo")
+		.post(name="uploadAgencyLogo", pattern="agencies/[key]/logo", to="agencies##uploadLogo")
+		.get(name="agencyImages", pattern="agencies/[key]/images", to="agencies##images")
+		.patch(name="updateAgencyImages", pattern="agencies/[key]/images", to="agencies##updateImages")
+
+		// Staff routes
+		.get(name="agencyStaff", pattern="agencies/[key]/staff", to="agents##index")
+		.post(name="createAgencyStaff", pattern="agencies/[key]/staff", to="agents##create")
+		.delete(name="deleteAgencyStaff", pattern="agencies/[key]/staff/[agentKey]", to="agents##delete")
+		.patch(name="updateAgencyStaff", pattern="agencies/[key]/staff/[agentKey]", to="agents##update")
+
+		// General resources
 		.resources("users")
+		.resources("agencies")
 
 		// The "wildcard" call below enables automatic mapping of "controller/action" type routes.
-		// This way you don't need to explicitly add a route every time you create a new action in a controller.
 		.wildcard()
 
-		// The root route below is the one that will be called on your application's home page (e.g. http://127.0.0.1/).
-		// You can, for example, change "wheels##wheels" to "home##index" to call the "index" action on the "home" controller instead.
+		// The root route
 		.root(to = "wheels##wheels", method = "get")
 	.end();
 </cfscript>
